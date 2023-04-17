@@ -12,6 +12,17 @@ public class DepartmentsController : ControllerBase
     {
         _context = context;
     }
+
+    [HttpPost("/departments")]
+    public async Task<ActionResult> AddADepartment([FromBody] DepartmentCreateRequest request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+        return Ok(request);
+    }
+
     [HttpGet("/departments")]
     public async Task<ActionResult<DepartmentsResponse>> GetDepartments()
     {
