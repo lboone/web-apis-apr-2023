@@ -8,6 +8,7 @@ public class HrDataContext : DbContext
     {
         
     }
+
     // All of the entity classes it should track in the database
     public DbSet<DepartmentEntity> Departments { get; set; }
 
@@ -15,15 +16,11 @@ public class HrDataContext : DbContext
     {
         return Departments.Where(d => d.Removed == false);
     }
-    public IQueryable<DepartmentEntity> GetRemovedDepartments()
-    {
-        return Departments.Where(d => d.Removed == true);
-    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<DepartmentEntity>()
-            .Property(p => p.Name)
+        modelBuilder.Entity<DepartmentEntity>().Property(p => p.Name)
             .HasMaxLength(20);
+
         modelBuilder.Entity<DepartmentEntity>()
             .HasIndex(b => b.Name).IsUnique();
 

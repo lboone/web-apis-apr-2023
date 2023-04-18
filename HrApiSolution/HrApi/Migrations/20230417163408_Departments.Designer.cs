@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HrApi.Migrations
 {
     [DbContext(typeof(HrDataContext))]
-    [Migration("20230417163409_Departments")]
+    [Migration("20230417163408_Departments")]
     partial class Departments
     {
         /// <inheritdoc />
