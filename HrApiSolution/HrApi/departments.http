@@ -2,12 +2,15 @@
 GET http://localhost:1337/departments
 
 ### Getting the Department by id
-GET http://localhost:1337/departments/1
+GET http://localhost:1337/departments/3
 
 ### Adding a Departments
 POST http://localhost:1337/departments
 Content-Type: application/json
 
 {
-  "name": "Software Testers"
+  "name": "Software Testerss"
 }
+
+### Delete a Department
+DELETE http://localhost:1337/departments/1002
