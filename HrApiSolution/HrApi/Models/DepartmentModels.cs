@@ -23,7 +23,9 @@ public record DepartmentsResponse
 }
 public record DepartmentSummaryItem
 {
+    [Required]
     public string Id { get; set; } = string.Empty;
+    [Required]
     public string Name { get; set; } = string.Empty;
 }
 
