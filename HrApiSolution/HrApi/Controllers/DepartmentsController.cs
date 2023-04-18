@@ -9,9 +9,11 @@ namespace HrApi.Controllers;
 
 public class DepartmentsController : ControllerBase
 {
+
     private readonly HrDataContext _context;
     private readonly IMapper _mapper;
     private readonly MapperConfiguration _config;
+
     public DepartmentsController(HrDataContext context, IMapper mapper, MapperConfiguration config)
     {
         _context = context;
@@ -20,14 +22,15 @@ public class DepartmentsController : ControllerBase
     }
 
     [HttpPost("/departments")]
+    [ResponseCache(Duration = 5, Location = ResponseCacheLocation.Any)]
     public async Task<ActionResult> AddADepartment([FromBody] DepartmentCreateRequest request)
     {
+
         if (!ModelState.IsValid)
         {
-            return BadRequest();
+            return BadRequest(ModelState); // 400
+
         }
-
-
 
         var departmentToAdd = _mapper.Map<DepartmentEntity>(request);
 
@@ -35,17 +38,18 @@ public class DepartmentsController : ControllerBase
         try
         {
             await _context.SaveChangesAsync();
-
             var response = _mapper.Map<DepartmentSummaryItem>(departmentToAdd);
-            return Ok(response);
+            return CreatedAtRoute("get-department-by-id", new { id = response.Id }, response);
         }
-        catch (DbUpdateException)
+        catch (DbUpdateException ex)
         {
-
             return BadRequest("That Department Exists");
         }
     }
 
+
+    // GET /departments
+    [ResponseCache(Duration = 5, Location = ResponseCacheLocation.Any)]
     [HttpGet("/departments")]
     public async Task<ActionResult<DepartmentsResponse>> GetDepartments()
     {
@@ -56,5 +60,23 @@ public class DepartmentsController : ControllerBase
                 .ToListAsync()
         };
         return Ok(response);
+    }
+    // GET /departments/8
+
+    [HttpGet("/departments/{id:int}", Name = "get-department-by-id")]
+    public async Task<ActionResult> GetDepartmentById(int id)
+    {
+        var response = await _context.Departments
+             .Where(dept => dept.Id == id)
+             .ProjectTo<DepartmentSummaryItem>(_config)
+             .SingleOrDefaultAsync();
+        if (response is null)
+        {
+            return NotFound();
+        }
+        else
+        {
+            return Ok(response);
+        }
     }
 }

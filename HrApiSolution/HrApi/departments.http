@@ -1,10 +1,13 @@
 ### Getting the Departments
 GET http://localhost:1337/departments
 
+### Getting the Department by id
+GET http://localhost:1337/departments/1
+
 ### Adding a Departments
 POST http://localhost:1337/departments
 Content-Type: application/json
 
 {
-  "name": "Janitorial"
+  "name": "Software Testers"
 }
