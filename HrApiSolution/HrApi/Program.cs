@@ -2,6 +2,7 @@ using AutoMapper;
 using HrApi.Domain;
 using HrApi.Profiles;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 // the default web application builder has about 190+ "Services" that do all the work in your API.
@@ -21,10 +22,18 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Contact = new Microsoft.OpenApi.Models.OpenApiContact
         {
-            Name ="Lloyd Boone",
-            Email = "lboone@progressive.com"
+            Name ="Jeff Gonzalez",
+            Email = "jeff@aol.com"
+        },
+        License = new Microsoft.OpenApi.Models.OpenApiLicense
+        {
+            Name = "MIT",
+            Url = new Uri("https://opensource.org/license/mit/")
         }
     });
+
+    var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName));
 });
 
 var hrConnectionString = builder.Configuration.GetConnectionString("hr-data");

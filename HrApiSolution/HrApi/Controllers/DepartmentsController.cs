@@ -5,8 +5,10 @@ using HrApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace HrApi.Controllers;
+
 [Route("/departments")]
 [Produces("application/json")]
 public class DepartmentsController : ControllerBase
@@ -28,9 +30,6 @@ public class DepartmentsController : ControllerBase
     [ProducesResponseType(404)]
     public async Task<ActionResult> UpdateDepartment(int id, [FromBody] DepartmentUpdateRequest request)
     {
-        var demo = new DepartmentUpdateRequest();
-
-
         if (id != request.Id)
         {
             return BadRequest();
@@ -52,7 +51,13 @@ public class DepartmentsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Use this to remove a department
+    /// </summary>
+    /// <param name="id">The id of the department to remove, duh.</param>
+    /// <returns></returns>
     [HttpDelete("{id:int}")]
+    [ProducesResponseType(204)]
     public async Task<ActionResult> RemoveDepartment(int id)
     {
         var department = await _context.GetActiveDepartments()
@@ -66,7 +71,7 @@ public class DepartmentsController : ControllerBase
         return NoContent(); // 204 - success, but no content (body)
     }
 
-    [HttpPost("")]
+    [HttpPost()]
     [ResponseCache(Duration = 5, Location = ResponseCacheLocation.Any)]
     public async Task<ActionResult<DepartmentSummaryItem>> AddADepartment([FromBody] DepartmentCreateRequest request)
     {
@@ -95,22 +100,31 @@ public class DepartmentsController : ControllerBase
 
     // GET /departments
     [ResponseCache(Duration = 5, Location = ResponseCacheLocation.Any)]
-    [HttpGet("")]
-    public async Task<ActionResult<DepartmentsResponse>> GetDepartments()
+    [HttpGet()]
+    public async Task<ActionResult<DepartmentsResponse>> GetDepartments(CancellationToken token)
     {
         var response = new DepartmentsResponse
         {
             Data = await _context.GetActiveDepartments()
                 .ProjectTo<DepartmentSummaryItem>(_config)
-                .ToListAsync()
+                .ToListAsync(token)
         };
         return Ok(response);
     }
     // GET /departments/8
 
+    
+    /// <summary>
+    /// Allows you to retrieve a document with information about this department
+    /// </summary>
+    /// <param name="id">The id of the department</param>
+    /// <returns>Either a 404 or some information about this.</returns>
     [HttpGet("{id:int}", Name = "get-department-by-id")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
     public async Task<ActionResult> GetDepartmentById(int id)
     {
+   
         var response = await _context.GetActiveDepartments()
              .Where(dept => dept.Id == id)
              .ProjectTo<DepartmentSummaryItem>(_config)
