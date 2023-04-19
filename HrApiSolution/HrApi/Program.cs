@@ -22,8 +22,8 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Contact = new Microsoft.OpenApi.Models.OpenApiContact
         {
-            Name ="Jeff Gonzalez",
-            Email = "jeff@aol.com"
+            Name ="Lloyd Boone",
+            Email = "lboone@progressive.com"
         },
         License = new Microsoft.OpenApi.Models.OpenApiLicense
         {
