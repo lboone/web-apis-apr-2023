@@ -20,7 +20,7 @@ builder.Services.AddControllers(options =>
 
 }).AddJsonOptions(options =>
 {
-    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+   // options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -32,8 +32,8 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Contact = new Microsoft.OpenApi.Models.OpenApiContact
         {
-            Name = "Lloyd Boone",
-            Email = "lloyd_boone@progressive.com.com"
+            Name = "Jeff Gonzalez",
+            Email = "jeff@aol.com"
         },
         License = new Microsoft.OpenApi.Models.OpenApiLicense
         {
